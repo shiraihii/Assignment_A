@@ -203,7 +203,8 @@ def mirrors_solve(cnt_case, mirror_pt_r, mirror_pt_c, mirror_pt_dir, num_row, nu
     # Fasten intersection point calculation
     light_forward_v_indices = [x[0] for x in light_forward_v]
     light_backward_v_indices = [x[0] for x in light_backward_v]
-    solution = []
+    solutions_num = 0
+    solution = [num_row + 2, num_col + 2]
     for [r, col_start, col_end] in light_forward_h:
         index_start = numpy.searchsorted(light_backward_v_indices, col_start)
         index_end = numpy.searchsorted(light_backward_v_indices, col_end)
@@ -212,8 +213,9 @@ def mirrors_solve(cnt_case, mirror_pt_r, mirror_pt_c, mirror_pt_dir, num_row, nu
                 index_end += 1
         for [c, row_start, row_end] in light_backward_v[index_start:index_end]:
             if (row_start <= r <= row_end):
-                solution.append([r, c])
-
+                solutions_num += 1
+                if (solution > [r, c]):
+                    solution = [r, c]
     for [r, col_start, col_end] in light_backward_h:
         index_start = numpy.searchsorted(light_forward_v_indices, col_start)
         index_end = numpy.searchsorted(light_forward_v_indices, col_end)
@@ -222,19 +224,17 @@ def mirrors_solve(cnt_case, mirror_pt_r, mirror_pt_c, mirror_pt_dir, num_row, nu
                 index_end += 1
         for [c, row_start, row_end] in light_forward_v[index_start:index_end]:
             if (row_start <= r <= row_end):
-                solution.append([r, c])
+                solutions_num += 1
+                if (solution > [r, c]):
+                    solution = [r, c]
 
-    # Output least indexed one
-    solution.sort()
-
-    if (len(solution) == 0):
+    if (solutions_num == 0):
         # No solution
         print("Case {0}: impossible".format(cnt_case))
     else:
         # Output Solution
-        solution.sort()
         print("Case {0}: {1} {2} {3}".format(
-            cnt_case, len(solution), solution[0][0] + 1, solution[0][1]))
+            cnt_case, solutions_num, solution[0] + 1, solution[1]))
 
 
 if __name__ == '__main__':
