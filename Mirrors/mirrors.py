@@ -22,6 +22,7 @@ def parse_input(filename):
                 cnt_mirrot_pt = 0
                 if (num_slash + num_backslash == 0):
                     mirrors_solve_empty(cnt_case, num_row, num_col)
+                    is_map_size_read = False
             else:
                 if (cnt_mirrot_pt <= num_slash + num_backslash - 1):
                     mirror_pt_r[cnt_mirrot_pt], mirror_pt_c[cnt_mirrot_pt] = [
