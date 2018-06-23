@@ -205,17 +205,23 @@ def mirrors_solve(cnt_case, mirror_pt_r, mirror_pt_c, mirror_pt_dir, num_row, nu
     light_backward_v_indices = [x[0] for x in light_backward_v]
     solutions_num = 0
     solution = [num_row + 2, num_col + 2]
+    # For forward light beam's horizontal
     for [r, col_start, col_end] in light_forward_h:
+        # Find indices of possible intersection
         index_start = numpy.searchsorted(light_backward_v_indices, col_start)
         index_end = numpy.searchsorted(light_backward_v_indices, col_end)
         if (index_end < len(light_backward_v_indices)):
             if (light_backward_v_indices[index_end] == col_end):
                 index_end += 1
+        # Try to find intersection
         for [c, row_start, row_end] in light_backward_v[index_start:index_end]:
             if (row_start <= r <= row_end):
+                # If Found
                 solutions_num += 1
                 if (solution > [r, c]):
+                    # Update best solution
                     solution = [r, c]
+    # Same for backward's
     for [r, col_start, col_end] in light_backward_h:
         index_start = numpy.searchsorted(light_forward_v_indices, col_start)
         index_end = numpy.searchsorted(light_forward_v_indices, col_end)
@@ -234,7 +240,12 @@ def mirrors_solve(cnt_case, mirror_pt_r, mirror_pt_c, mirror_pt_dir, num_row, nu
     else:
         # Output Solution
         print("Case {0}: {1} {2} {3}".format(
-            cnt_case, solutions_num, solution[0] + 1, solution[1]))
+            cnt_case, solutions_num,
+            # Since the problem indicate the first row/column's index as 1 rather than 0
+            # Don't forget we have add a virtual column to both left and right
+            # So don't need to add 1 to the column index
+            solution[0] + 1, solution[1])
+        )
 
 
 if __name__ == '__main__':
